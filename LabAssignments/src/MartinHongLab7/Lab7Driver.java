@@ -3,7 +3,7 @@ package MartinHongLab7;
 public class Lab7Driver {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		System.out.println("Lab7 Martin Hong");
 
 		Lab7MethodClass lab7MethodClass = new Lab7MethodClass();
 
