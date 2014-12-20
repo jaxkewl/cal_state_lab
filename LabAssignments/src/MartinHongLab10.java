@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+//adding in a command to an existing homework assignment
 public class MartinHongLab10 extends JPanel {
 
 	@Override
