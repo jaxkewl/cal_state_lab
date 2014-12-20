@@ -5,6 +5,7 @@ import MartinHongLab5Simple.MyPoint;
 
 public class Lab5Driver {
 
+	// this is the main program
 	public static void main(String[] args) {
 
 		// create the point
