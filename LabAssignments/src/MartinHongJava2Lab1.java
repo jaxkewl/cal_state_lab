@@ -10,8 +10,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import sun.net.www.content.audio.x_aiff;
-
 public class MartinHongJava2Lab1 implements Runnable {
 
 	public void setupFrame() {

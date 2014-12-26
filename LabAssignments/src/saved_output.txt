@@ -1,0 +1,2 @@
+Enter text, close window to save it to file
+
