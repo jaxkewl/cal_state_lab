@@ -17,10 +17,17 @@ import javax.swing.JTextArea;
 //You should handle the Window Close Event to do this
 public class MartinHongJava2Lab2 extends JFrame {
 	private JTextArea jTextArea;
-	private String pathName = "/Users/admin/Documents/workspace/cal_state_lab/LabAssignments/src/saved_output.txt";
+	
+	//use a relative path because it might be run on a machine with different OS or install directory.
+	private String pathName = "./src/saved_output.txt";
 
 	public MartinHongJava2Lab2() {
-		jTextArea = new JTextArea("Enter text, close window to save it to file\n\n");
+		
+		// create a JTextArea with the initial text set to the save location
+		jTextArea = new JTextArea(
+				"Enter text, close window to save it to file\n\n");
+		jTextArea.setCaretPosition(jTextArea.getText().length());
+		jTextArea.setText("saving file to: " + pathName + "\n\n");
 		jTextArea.setCaretPosition(jTextArea.getText().length());
 		add(jTextArea);
 		setSize(600, 600);
@@ -33,7 +40,7 @@ public class MartinHongJava2Lab2 extends JFrame {
 				try {
 					overwriteFileWithText(jTextArea.getText(), file);
 				} catch (IOException e1) {
-					e1.printStackTrace();	
+					e1.printStackTrace();
 				}
 			}
 
@@ -49,14 +56,13 @@ public class MartinHongJava2Lab2 extends JFrame {
 					new FileWriter(file.getPath())));
 			out.write(text);
 			out.close();
-		}
-		else if (!file.exists()) {
+		} else if (!file.exists()) {
 			PrintWriter out = new PrintWriter(new BufferedWriter(
 					new FileWriter(file.getPath())));
 			out.write(text);
 			out.close();
 		}
-		
+
 	}
 
 	public static void main(String[] args) {
