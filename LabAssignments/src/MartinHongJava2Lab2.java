@@ -19,7 +19,7 @@ public class MartinHongJava2Lab2 extends JFrame {
 	private JTextArea jTextArea;
 	
 	//use a relative path because it might be run on a machine with different OS or install directory.
-	private String pathName = "./src/saved_output.txt";
+	private String pathName = "./saved_output.txt";
 
 	public MartinHongJava2Lab2() {
 		
@@ -38,7 +38,9 @@ public class MartinHongJava2Lab2 extends JFrame {
 				super.windowClosing(e);
 				File file = new File(pathName);
 				try {
-					overwriteFileWithText(jTextArea.getText(), file);
+					PrintWriter out = new PrintWriter(new BufferedWriter(
+							new FileWriter(file.getPath())));
+					jTextArea.write(out);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -48,22 +50,6 @@ public class MartinHongJava2Lab2 extends JFrame {
 
 	}
 
-	private void overwriteFileWithText(String text, File file)
-			throws IOException {
-		if (file.isFile()) {
-			file.delete();
-			PrintWriter out = new PrintWriter(new BufferedWriter(
-					new FileWriter(file.getPath())));
-			out.write(text);
-			out.close();
-		} else if (!file.exists()) {
-			PrintWriter out = new PrintWriter(new BufferedWriter(
-					new FileWriter(file.getPath())));
-			out.write(text);
-			out.close();
-		}
-
-	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
