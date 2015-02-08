@@ -1,6 +1,7 @@
 package lab3;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -12,16 +13,8 @@ import java.net.Socket;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Amir
- */
 public class NetworkingServer extends JFrame {
 	Socket con;
 	ObjectInputStream input;
@@ -30,7 +23,7 @@ public class NetworkingServer extends JFrame {
 	private JTextField textBox;
 	private JLabel labelBox;
 
-	public NetworkingServer() {
+	public NetworkingServer() throws IOException {
 
 		super("Networking Server");
 
@@ -48,49 +41,71 @@ public class NetworkingServer extends JFrame {
 
 		// setup the response box for the server
 		labelBox = new JLabel();
+		labelBox.setForeground(Color.BLUE);
 		add(labelBox, BorderLayout.CENTER);
 
+		setSize(400, 100);
+		setVisible(true);
+
+		// setup sockets and streams
+		myServer();
 	}
 
 	protected void sendData(String actionCommand) {
-		
-		
-	}
-
-	/**
-	 * @param args
-	 *            the command line arguments
-	 */
-	public static void main(String[] args) {
-		// TODO code application logic here
-		NetworkingServer myapp = new NetworkingServer();
-		myapp.myServer();
-	}
-
-	public void myServer() {
 		try {
-			String str = "waiting to read";
-			ServerSocket server = new ServerSocket(5234, 100);
-			con = server.accept();
-			System.out.println("Connected to Client");
-			output = new ObjectOutputStream(con.getOutputStream());
-			input = new ObjectInputStream(con.getInputStream());
-			while (true) {
-				str = (String) input.readObject();
-				if (str != null)
-					System.out.println(str);
-			}
+			output.writeObject(actionCommand);
+			output.flush();
+			displayMessage("SERVER>>> " + actionCommand);
 		} catch (IOException e) {
-		} catch (ClassNotFoundException e) {
-		} finally {
-			try {
-				input.close();
-				output.close();
-				con.close();
+			e.printStackTrace();
+		}
 
-			} catch (IOException e) {
+	}
 
+	// display the input stream message to the label box
+	private void displayMessage(final String messageToDisplay) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() // updates displayArea
+			{
+				labelBox.setText(messageToDisplay);
 			}
+		});
+	}
+
+	// setup the server socket, streams, and listen for inputs
+	public void myServer() throws IOException {
+		try {
+			displayMessage("waiting to connect");
+			ServerSocket server = new ServerSocket(12345, 100);
+			con = server.accept();
+			displayMessage("Connected to Client");
+			input = new ObjectInputStream(con.getInputStream());
+			output = new ObjectOutputStream(con.getOutputStream());
+			while (true) {
+				String str = (String) input.readObject();
+				if (str != null)
+					displayMessage("CLIENT>>> " + str);
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+
+			output.close();
+			con.close();
+			input.close();
 		}
 	}
+
+	public static void main(String[] args) throws IOException {
+
+		
+		try {
+			// instantiate our server
+			NetworkingServer myapp = new NetworkingServer();
+		} catch (Exception e) {
+			System.out.println("Connection closed");
+		}
+
+	}
+
 }
